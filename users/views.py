@@ -10,7 +10,7 @@ from django.contrib import messages
 from main.models import Product
 
 
-def redister(request):
+def register(request):
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
