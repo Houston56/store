@@ -32,12 +32,12 @@ class CheckoutView(CartMixin, View):
         context = {
             'form': form,
             'cart': cart,
-            'cart_items': cart.items.select_related('product', 'product_size__size').order_by('_added_at'),
+            'cart_items': cart.items.select_related('product', 'product_size__size').order_by('-added_at'),
             'total_price': total_price,
         }
 
         if request.headers.get('HX-Request'):
-            return TemplateResponse(request, 'orders/checkout_contents.html', context)
+            return TemplateResponse(request, 'orders/checkout_content.html', context)
         return render(request, 'orders/checkout.html', context)
 
     def post(self, request):
@@ -52,7 +52,7 @@ class CheckoutView(CartMixin, View):
         if not payment_provider or payment_provider not in ['stripe', 'heleket']:
             context = {
                 'form': OrderForm(user=request.user),
-                'cartitems': cart.items.select_related('product', 'product_size__size').order_by('_added_at'),
+                'cartitems': cart.items.select_related('product', 'product_size__size').order_by('-added_at'),
                 'total_price': cart.subtotal,
                 'error_message': 'Please select a valid payment provider (Stripe or Helekety).',
             }
@@ -86,11 +86,11 @@ class CheckoutView(CartMixin, View):
                 payment_provider=payment_provider,
             )
 
-            for item in cart.select_related('product', 'product_size__size'):
+            for item in cart.items.select_related('product', 'product_size__size'):
                 OrderItem.objects.create(
                     order=order,
                     product=item.product,
-                    size=item.product_siize,
+                    size=item.product_size,
                     quantity=item.quantity,
                     price=item.product.price or Decimal('0.00')
                 )
@@ -109,7 +109,7 @@ class CheckoutView(CartMixin, View):
                 context = {
                     'form': form,
                     'cart': cart,
-                    'cart_items': cart.items.select_related('product', 'product_size__size').order_by('_added_at'),
+                    'cart_items': cart.items.select_related('product', 'product_size__size').order_by('-added_at'),
                     'total_price': total_price,
                     'error_message': f"Payment processing error: {str(e)}",
                 }
@@ -121,7 +121,7 @@ class CheckoutView(CartMixin, View):
             context = {
                 'form': form,
                 'cart': cart,
-                'cart_items': cart.items.select_related('product', 'product_size__size').order_by('_added_at'),
+                'cart_items': cart.items.select_related('product', 'product_size__size').order_by('-added_at'),
                 'total_price': total_price,
                 'error_message': f"Please correct the errors in the form.: {str(e)}",
             }
