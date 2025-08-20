@@ -2,7 +2,7 @@ from django import forms
 from django.utils.html import strip_tags
 
 
-class OrderForm(forms.From):
+class OrderForm(forms.Form):
     first_name = forms.CharField(
         max_length=50,
         widget=forms.TextInput(attrs={
