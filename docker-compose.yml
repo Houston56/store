@@ -25,16 +25,16 @@ services:
     - .env
     volumes:
       - .:/app
-      - ./static:/app/static
+      - static:/app/static
       - media:/app/media
     depends_on:
       db:
         condition: service_healthy
-    comand: sh -c "python manage.py migrate && gunicorn store.wsgi:application --bind 0.0.0.0:8000"
+    command: sh -c "python manage.py migrate && gunicorn store.wsgi:application --bind 0.0.0.0:8000"
     networks:
       - app-network
 
-  ngiinx:
+  nginx:
     image: nginx:latest
     ports:
       - "80:80"

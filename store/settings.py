@@ -35,8 +35,8 @@ ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'humsh-store.ru', 'www.humsh-store.ru
 CSRF_TRUSTED_ORIGINS = [
     'http://127.0.0.1:8000',
     'http://localhost:8000',
-    'http://humsh-store.ru',
-    'http://www.humsh-store.ru',
+    'https://humsh-store.ru',
+    'https://www.humsh-store.ru',
 ]
 
 CSRF_COOKIE_SECURE = True
